@@ -1,0 +1,165 @@
+[
+  {
+    "id": 0,
+    "name": "Sword Attack",
+    "target": "enemyFrontSingle",
+    "type": "attack",
+    "baseDamage": 100,
+    "cooldown": 20,
+    "counterType": "melee",
+    "counterMod": 0.6,
+    "guardable": true
+  },
+  {
+    "id": 10,
+    "name": "Commander Charge",
+    "target": "enemyFrontSingle",
+    "type": "attack",
+    "damageMod": 1,
+    "baseDamage": 120,
+    "cooldown": 60,
+    "guardable": true
+  },
+  {
+    "id": 1,
+    "name": "Spear Attack",
+    "target": "enemyFrontSingle",
+    "type": "attack",
+    "baseDamage": 100,
+    "damageMod": 0.8,
+    "cooldown": 20,
+    "counterType": "melee",
+    "counterMod": 0.6,
+    "guardable": true
+  },
+  {
+    "id": 100,
+    "name": "Guard",
+    "target": "allyCol",
+    "type": "selfBuff",
+    "buffs": [
+      {
+        "buffId": 0,
+        "amount": 70
+      }
+    ],
+    "cooldown": 30
+  },
+  {
+    "id": 200,
+    "name": "Bow Attack",
+    "target": "enemyBothSingle",
+    "type": "attack",
+    "baseDamage": 100,
+    "cooldown": 20,
+    "guardable": true
+  },
+  {
+    "id": 201,
+    "name": "Arrow Storm",
+    "target": "enemyAll",
+    "type": "attack",
+    "baseDamage": 100,
+    "damageMod": 0.7,
+    "cooldown": 120
+  },
+  {
+    "id": 202,
+    "name": "Barrage",
+    "target": "enemyRow",
+    "type": "attack",
+    "baseDamage": 100,
+    "damageMod": 0.8,
+    "cooldown": 50
+  },
+  {
+    "id": 300,
+    "name": "Psyche Up",
+    "target": "allySingle",
+    "type": "buff",
+    "buffs": [
+      {
+        "buffId": 100,
+        "amount": 20
+      }
+    ],
+    "baseDamage": 100,
+    "cooldown": 20
+  },
+  {
+    "id": 301,
+    "name": "Battle Strategy",
+    "target": "allyRandomCounts",
+    "type": "randomBuff",
+    "buffs": [
+      {
+        "buffId": 100,
+        "amount": 20
+      },
+      {
+        "buffId": 110,
+        "amount": 20
+      }
+    ],
+    "baseDamage": 100,
+    "cooldown": 20
+  },
+  {
+    "id": 400,
+    "name": "Heal",
+    "target": "allySingle",
+    "type": "heal",
+    "baseDamage": 60,
+    "cooldown": 20
+  },
+  {
+    "id": 500,
+    "name": "Carpet Bomb",
+    "target": "enemyAll",
+    "chargeTime": 1,
+    "chargeCooldown": 45,
+    "type": "attack",
+    "baseDamage": 60,
+    "cooldown": 60
+  },
+  {
+    "id": 600,
+    "name": "Shoot",
+    "target": "enemyBothSingle",
+    "type": "attack",
+    "cooldown": 50,
+    "effects": [{
+      "type": "interrupt"
+    }],
+    "guardable": true
+  },
+  {
+    "id": 610,
+    "name": "Sabotage",
+    "type": "buff",
+    "target": "enemyBothSingle",
+    "cooldown": 50,
+    "effects": [{
+      "type": "guardBreak",
+      "amount": 60
+    }]
+  },
+  {
+    "id": 611,
+    "name": "Sticky Goo",
+    "type": "buff",
+    "target": "enemyBothSingle",
+    "cooldown": 50,
+    "effects": [{
+      "type": "cooldown",
+      "amount": 40
+    }],
+    "guardable": true
+  },
+  {
+    "id": 42069,
+    "type": "wait",
+    "name": "Stand By",
+    "cooldown": 30
+  }
+]

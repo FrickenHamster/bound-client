@@ -1,0 +1,26 @@
+{
+	"env": {
+		"es6": true
+	},
+	"globals": {
+		"Atomics": "readonly",
+		"SharedArrayBuffer": "readonly"
+	},
+	"parser": "@babel/eslint-parser",
+	"parserOptions": {
+		"ecmaVersion": 2018,
+		"sourceType": "module",
+		"requireConfigFile": false,
+		"importAttributes": true,
+		"deprecatedAssertSyntax": true
+	},
+	"rules": {
+		"indent": "off",
+		"semi": [2, "always"],
+		"no-multiple-empty-lines": "error",
+		"prettier/prettier": "error",
+		"arrow-parens": ["error", "as-needed"]
+	},
+	"extends": ["prettier"],
+	"plugins": ["prettier"]
+}

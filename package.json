@@ -1,0 +1,46 @@
+{
+  "name": "bound-client",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.22.11",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/preset-env": "^7.22.10",
+    "babel-loader": "^9.1.3",
+    "babel-polyfill": "^6.26.0",
+    "collisions": "^2.0.13",
+    "css-loader": "^6.8.1",
+    "express": "^4.18.2",
+    "normalize.css": "^8.0.1",
+    "open": "^9.1.0",
+    "pathfinding": "^0.4.18",
+    "pixi.js": "^7.3.2",
+    "prando": "^6.0.1",
+    "sass": "^1.66.1",
+    "sass-loader": "^13.3.2",
+    "style-loader": "^3.3.3",
+    "webpack": "^5.88.2",
+    "webpack-dev-middleware": "^6.1.1",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development node dev",
+    "alpha": "cross-env NODE_ENV=alpha node dev",
+    "lint": "eslint ./**/*.js",
+    "lint.fix": "eslint --fix ./**/*.js"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.22.11",
+    "@babel/plugin-syntax-import-attributes": "^7.22.5",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.3"
+  },
+  "type": "module",
+  "imports": {
+    "#config/*": "./config/*.js"
+  }
+}

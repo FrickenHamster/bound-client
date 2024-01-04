@@ -1,0 +1,10 @@
+{
+  "servingPort": 2654,
+  "servingHost": "http://localhost",
+  "serverHost": "ws://localhost:5364",
+  "statsLocation": "http://localhost:2654/stats",
+  "mockKuma": false,
+  "chooseMockKuma": true,
+  "logNet": true,
+  "autoWait": false
+}

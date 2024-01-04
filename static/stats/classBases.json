@@ -1,0 +1,82 @@
+[
+  {
+    "id": 0,
+    "name": "Warrior",
+    "delay": 100,
+    "baseAttack": 60,
+    "baseDefense": 35,
+    "preferredPosition": 0,
+    "frontBias": 10,
+    "rearBias": 0,
+    "icon": "warriorIcon",
+    "counters": ["melee"]
+  },
+  {
+    "id": 1,
+    "name": "Vanguard",
+    "delay": 150,
+    "baseAttack": 45,
+    "baseDefense": 45,
+    "preferredPosition": 2,
+    "frontBias": 7,
+    "rearBias": 3,
+    "icon": "vanguardIcon",
+    "counters": ["melee"],
+    "squadSprite": "piskeBobo"
+  },
+  {
+    "id": 2,
+    "name": "Archer",
+    "delay": 200,
+    "baseAttack": 50,
+    "baseDefense": 30,
+    "preferredPosition": 1,
+    "frontBias": 1,
+    "rearBias": 10,
+    "icon": "archerIcon"
+  },
+  {
+    "id": 3,
+    "name": "Tactician",
+    "delay": 10,
+    "baseAttack": 50,
+    "baseDefense": 30,
+    "preferredPosition": 1,
+    "frontBias": 1,
+    "rearBias": 10,
+    "icon": "tacticianIcon"
+  },
+  {
+    "id": 4,
+    "name": "Medic",
+    "delay": 200,
+    "baseAttack": 45,
+    "baseDefense": 40,
+    "preferredPosition": 1,
+    "frontBias": 3,
+    "rearBias": 7,
+    "icon": "medicIcon"
+  },
+  {
+    "id": 5,
+    "name": "Artillery",
+    "delay": 120,
+    "baseAttack": 60,
+    "baseDefense": 40,
+    "preferredPosition": 1,
+    "frontBias": 1,
+    "rearBias": 9,
+    "icon": "artilleryIcon"
+  },
+  {
+    "id": 6,
+    "name": "Spy",
+    "delay": 70,
+    "baseAttack": 50,
+    "baseDefense": 30,
+    "preferredPosition": 2,
+    "frontBias": 2,
+    "rearBias": 8,
+    "icon": "spyIcon"
+  }
+]

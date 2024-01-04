@@ -1,0 +1,32 @@
+[
+  {
+    "id": 0,
+    "name": "Guard",
+    "type": "amount"
+  },
+  {
+    "id": 10,
+    "name": "Charge",
+    "type": "amount"
+  },
+  {
+    "id": 100,
+    "name": "Atk+",
+    "type": "amount"
+  },
+  {
+  "id": 101,
+  "name": "Atk+%",
+  "type": "amount"
+  },
+  {
+    "id": 110,
+    "name": "Def+",
+    "type": "amount"
+  },
+  {
+    "id": 111,
+    "name": "Def+%",
+    "type": "amount"
+  }
+]
