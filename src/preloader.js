@@ -12,9 +12,19 @@ export const preloadGame = async () => {
           },
         ],
       },
+      {
+        name: 'traps',
+        assets: [
+          {
+            name: 'explosion',
+            srcs: 'images/traps/explosion.json',
+          },
+        ],
+      },
     ],
   };
 
   await Assets.init({ manifest });
-  await Assets.loadBundle('game-ui');
+  await Assets.loadBundle('bounders');
+  await Assets.loadBundle('traps');
 };

@@ -12,7 +12,7 @@ export const MAX_FACTIONS = 25;
 
 export const MAX_PLAYERS = 10;
 
-export const MAX_ANIMALS = 50;
+export const MAX_EXPLOSIONS = 100;
 
 export const MAX_STASHES = 50;
 

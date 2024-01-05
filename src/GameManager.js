@@ -2,6 +2,7 @@ import { Application, Container, Graphics } from 'pixi.js';
 import { preloadGame } from './preloader.js';
 import GameWorld from './GameWorld.js';
 import { AStarFinder } from 'pathfinding';
+import { LOCAL_TICK_TIME } from '#config/gameConstants';
 
 export default class GameManager {
   constructor() {
@@ -53,6 +54,6 @@ export default class GameManager {
 
     setInterval(() => {
       this.gameWorld.logicStep();
-    }, 33);
+    }, LOCAL_TICK_TIME);
   }
 }

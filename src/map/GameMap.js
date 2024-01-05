@@ -66,16 +66,64 @@ export default class GameMap {
     this.lineColSystem.update();
   }
 
+  getClosestTarget(xPos, yPos, tarX, tarY) {
+    let gx = Math.floor(tarX / pathNodeWidth);
+    let gy = Math.floor(tarY / pathNodeHeight);
+    if (this.grid.isWalkableAt(gx, gy)) {
+      return { x: tarX, y: tarY };
+    }
+    const rad = Math.atan2(yPos - tarY, xPos - tarX);
+    const dx = Math.cos(rad);
+    const dy = Math.sin(rad);
+    let t = 0;
+    while (
+      !this.grid.isWalkableAt(Math.floor(gx), Math.floor(gy)) &&
+      (Math.abs(xPos - gx) > 1 || Math.abs(yPos - gy) > 1)
+    ) {
+      gx += dx;
+      gy += dy;
+      t++;
+      if (t > 50) break;
+    }
+
+    return { x: gx * pathNodeWidth, y: gy * pathNodeHeight };
+  }
+
   findPath(x, y, tarX, tarY) {
     const sx = Math.floor(x / pathNodeWidth);
     const sy = Math.floor(y / pathNodeHeight);
-    const ex = Math.floor(tarX / pathNodeWidth);
-    const ey = Math.floor(tarY / pathNodeHeight);
+    let ex = Math.floor(tarX / pathNodeWidth);
+    let ey = Math.floor(tarY / pathNodeHeight);
 
-    const path = this.pf.findPath(sx, sy, ex, ey, this.grid.clone());
+    let path = this.pf.findPath(sx, sy, ex, ey, this.grid.clone());
+    let tarEnd = true;
+    if (path.length === 1) return { path, tarX, tarY };
+    if (path.length === 0) {
+      tarEnd = false;
+      const rad = Math.atan2(sy - ey, sx - ex);
+      const dx = Math.cos(rad);
+      const dy = Math.sin(rad);
+      let t = 0;
+      while (path.length === 0) {
+        ex += dx;
+        ey += dy;
+        path = this.pf.findPath(
+          sx,
+          sy,
+          Math.floor(ex),
+          Math.floor(ey),
+          this.grid.clone(),
+        );
+        t++;
+        if (t > 10) return;
+      }
+      tarX = path[path.length - 1][0] * pathNodeWidth;
+      tarY = path[path.length - 1][1] * pathNodeHeight;
+    }
 
     let n = 0;
     let c = 1;
+
     const finalPath = [path[0]];
     while (c < path.length) {
       if (
@@ -99,7 +147,7 @@ export default class GameMap {
     for (const [x, y] of finalPath) {
       this.debugGraphics.lineTo(x * pathNodeWidth + 8, y * pathNodeHeight + 8);
     }
-    return finalPath;
+    return { path: finalPath, tarX, tarY };
   }
 
   checkLineClear(sx, sy, ex, ey, debug) {
@@ -123,7 +171,6 @@ export default class GameMap {
       for (const pp of points) {
         this.pg.lineTo(smx + pp[0], smy + pp[1]);
       }
-      //this.pg.drawRect(bx * pathNodeWidth, by * pathNodeHeight, 16, 16);
       this.pg.endFill();
       this.pg.rotation = rad;
     }
@@ -143,54 +190,5 @@ export default class GameMap {
     }
     checkPoly.remove();
     return true;
-
-    /*let xx = sx;
-		let yy = sy;
-		const rad = Math.atan2(ey - sy, ex - sx);
-		let dx = Math.cos(rad)
-		let dy = Math.sin(rad)
-
-		let t = 0;
-
-		if (debug)
-			this.pg.clear()
-
-		while (Math.abs(ex - xx) > 1 || Math.abs(ey - yy) > 1) {
-			xx += dx / 2;
-			yy += dy / 2;
-
-			const bx = Math.floor(xx);
-			const by = Math.floor(yy)
-
-			if (debug) {
-				this.pg.beginFill(0x3423e1)
-				this.pg.drawRect(bx * pathNodeWidth, by * pathNodeHeight, 16, 16);
-				this.pg.endFill()
-			}
-			/!*const bx = Math.floor(xx / 2);
-			const by = Math.floor(yy / 2);*!/
-			if (debug)
-			console.log('checking', Math.floor(xx), Math.floor(yy), this.grid.isWalkableAt(Math.floor(xx), Math.floor(yy)))
-			/!*if (!this.grid.isWalkableAt(Math.floor(xx), Math.floor(yy)))
-			//if (this.blockMap[by * 30 + bx] === 1)
-				return false*!/
-			let cx = Math.floor(xx)
-			let cy = Math.floor(yy)
-
-			for (let i = -1; i <= 1; i++) {
-				for (let j = -1; j <= 1; j++) {
-					if (!this.grid.isWalkableAt(cx + i, cy + j)) {
-						return false
-					}
-				}
-			}
-
-			t++
-			if (t > 100) {
-				console.log('reeee')
-				return true
-			}
-		}
-		return true*/
   }
 }

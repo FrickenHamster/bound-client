@@ -20,7 +20,7 @@ export default class Bounder {
     this.tarX = this.xPos;
     this.tarY = this.yPos;
 
-    this.moveSpeed = 6;
+    this.moveSpeed = 4;
 
     this.sprite.texture = bounderSprites.usagibobo;
     this.sprite.anchor.set(0.5, 0.5);
@@ -28,6 +28,13 @@ export default class Bounder {
 
     this.updateSprite();
     this.alive = true;
+  }
+
+  die() {
+    this.xPos = Math.random() * 500;
+    this.yPos = Math.random() * 500;
+    this.state = 'idle';
+    this.updateSprite();
   }
 
   logicStep() {
@@ -69,15 +76,26 @@ export default class Bounder {
   }
 
   orderMoveTarget(tarX, tarY) {
-    this.tarX = tarX;
-    this.tarY = tarY;
-    this.path = this.gameWorld.gameMap.findPath(
+    const final = this.gameWorld.gameMap.getClosestTarget(
       this.xPos,
       this.yPos,
       tarX,
       tarY,
     );
-    if (this.path.length <= 1) return;
+    tarX = final.x;
+    tarY = final.y;
+    this.tarX = tarX;
+    this.tarY = tarY;
+    const res = this.gameWorld.gameMap.findPath(
+      this.xPos,
+      this.yPos,
+      tarX,
+      tarY,
+    );
+    this.path = res.path;
+    this.tarX = res.tarX;
+    this.tarY = res.tarY;
+    if (this.path?.length <= 1) return;
 
     this.state = 'moving';
     this.pathPosition = 1;
