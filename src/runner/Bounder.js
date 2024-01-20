@@ -24,21 +24,34 @@ export default class Bounder {
 
     this.sprite.texture = bounderSprites.usagibobo;
     this.sprite.anchor.set(0.5, 0.5);
-    this.sprite.alpha = 0.2;
+    // this.sprite.alpha = 0.2;
+
+    this.checkpointIndex = -1;
 
     this.updateSprite();
     this.alive = true;
   }
 
   die() {
-    this.xPos = Math.random() * 500;
-    this.yPos = Math.random() * 500;
+    let newPosition;
+    if (this.checkpointIndex >= 0) {
+      newPosition = this.gameWorld.zoneManager.randomCheckpointPosition(
+        this.checkpointIndex,
+      );
+    } else {
+      newPosition = this.gameWorld.zoneManager.randomStartPosition();
+    }
+    this.xPos = newPosition.x;
+    this.yPos = newPosition.y;
     this.state = 'idle';
     this.updateSprite();
   }
 
   logicStep() {
     if (!this.alive) return;
+
+    const startX = this.xPos;
+    const startY = this.yPos;
 
     switch (this.state) {
       case 'moving':
@@ -72,6 +85,17 @@ export default class Bounder {
 
         this.updateSprite();
         break;
+    }
+
+    if (this.xPos !== startX || this.yPos !== startY) {
+      const hitCheckpoint = this.gameWorld.zoneManager.pointInCheckpoint(
+        this.xPos,
+        this.yPos,
+      );
+      if (hitCheckpoint && hitCheckpoint.id > this.checkpointIndex) {
+        console.log('reeeee');
+        this.checkpointIndex = hitCheckpoint.id;
+      }
     }
   }
 
