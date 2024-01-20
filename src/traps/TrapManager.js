@@ -29,7 +29,6 @@ export default class TrapManager {
       explosion = this.explosionMap[data.id];
       this.explosionPool.splice(this.explosionPool.indexOf(explosion));
     }
-    // const explosion = this.explosionPool.pop();
     if (!explosion) {
       console.log('out of explosions');
       return;

@@ -13,12 +13,6 @@ export default class ZoneManager {
           break;
 
         case 'checkpointZone':
-          // const checkpoint = {
-          // 	x: zone.x,
-          // 	y: zone.y,
-          // 	width: zone.width,
-          // 	height: zone.height
-          // }
           const checkpoint = new CheckpointZone(
             this.checkpoints.length,
             zone.x,
