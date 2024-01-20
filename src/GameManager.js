@@ -1,8 +1,11 @@
 import { Application, Container, Graphics } from 'pixi.js';
 import { preloadGame } from './preloader.js';
 import GameWorld from './GameWorld.js';
-import { AStarFinder } from 'pathfinding';
 import { LOCAL_TICK_TIME } from '#config/gameConstants';
+import GameKeys from './GameKeys.js';
+
+import levelData from '../config/level.json';
+import boboData from '../config/bobo.json';
 
 export default class GameManager {
   constructor() {
@@ -21,14 +24,15 @@ export default class GameManager {
     this.app.stage.eventMode = 'static';
     this.app.stage.hitArea = this.app.screen;
 
-    const gg = new Graphics();
-
     this.app.stage.addEventListener('pointerup', e => {
-      this.gameWorld.bounder.orderMoveTarget(e.global.x, e.global.y);
+      this.gameWorld.bounder.orderMoveTarget(
+        e.global.x + this.gameWorld.viewX,
+        e.global.y + this.gameWorld.viewY,
+      );
     });
 
     this.app.stage.addEventListener('globalpointermove', e => {
-      const xx = Math.floor(e.global.x / 16);
+      /*const xx = Math.floor(e.global.x / 16);
       const yy = Math.floor(e.global.y / 16);
       const free = this.gameWorld.gameMap.grid.isWalkableAt(xx, yy);
       gg.clear();
@@ -38,19 +42,25 @@ export default class GameManager {
         gg.beginFill(0xff0000);
       }
       gg.drawRect(xx * 16, yy * 16, 16, 16);
-      gg.endFill();
+      gg.endFill();*/
     });
 
     this.gameWorld = new GameWorld(this, this.app.stage);
-    this.app.stage.addChild(gg);
 
-    this.initGame();
+    this.gameKeys = new GameKeys();
+
+    this.gameKeys.addKey('gameViewUp', ['KeyW']);
+    this.gameKeys.addKey('gameViewDown', ['KeyS']);
+    this.gameKeys.addKey('gameViewLeft', ['KeyA']);
+    this.gameKeys.addKey('gameViewRight', ['KeyD']);
+
+    this.initGame(levelData);
   }
 
-  async initGame() {
+  async initGame(levelData) {
     await preloadGame();
 
-    this.gameWorld.initGame();
+    this.gameWorld.initGame(levelData);
 
     setInterval(() => {
       this.gameWorld.logicStep();

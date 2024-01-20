@@ -1,6 +1,8 @@
 import { Graphics } from 'pixi.js';
 import { AStarFinder, Grid } from 'pathfinding';
 import {
+  MAP_NODE_HEIGHT,
+  MAP_NODE_WIDTH,
   mapNodeHeight,
   mapNodeWidth,
   pathNodeHeight,
@@ -8,17 +10,14 @@ import {
 } from '#config/mapConstants';
 
 import Collisions from 'collisions';
+import MapActor from './MapActor.js';
 
 export default class GameMap {
   constructor(gameWorld, layer) {
     this.gameWorld = gameWorld;
     this.layer = layer;
 
-    this.mapGraphics = new Graphics();
-    this.layer.addChild(this.mapGraphics);
-    this.blockMap = [];
-
-    this.grid = new Grid(60, 60);
+    this.mapActor = new MapActor(this, this.layer);
 
     this.debugGraphics = new Graphics();
     this.layer.addChild(this.debugGraphics);
@@ -29,46 +28,48 @@ export default class GameMap {
     this.pf = new AStarFinder();
 
     this.lineColSystem = new Collisions();
+  }
+
+  init({ mapWidth, mapHeight, mapTiles }) {
+    this.mapTiles = mapTiles;
+
+    this.mapActor.init({ mapWidth, mapHeight, mapTiles });
+
+    this.grid = new Grid(mapWidth, mapHeight);
 
     for (let i = 0; i < 30; i++) {
       for (let j = 0; j < 30; j++) {
-        if (Math.random() < 0.3) {
-          this.blockMap[i * 30 + j] = 1;
+        const id = i * mapWidth + j;
+        if (mapTiles[id] === 0) {
           const points = [
-            [j * mapNodeWidth, i * mapNodeHeight],
-            [(j + 1) * mapNodeWidth, i * mapNodeHeight],
-            [(j + 1) * mapNodeWidth, (i + 1) * mapNodeHeight],
-            [j * mapNodeWidth, (i + 1) * mapNodeHeight],
+            [j * MAP_NODE_WIDTH, i * MAP_NODE_HEIGHT],
+            [(j + 1) * MAP_NODE_WIDTH, i * MAP_NODE_HEIGHT],
+            [(j + 1) * MAP_NODE_WIDTH, (i + 1) * MAP_NODE_HEIGHT],
+            [j * MAP_NODE_WIDTH, (i + 1) * MAP_NODE_HEIGHT],
           ];
           this.lineColSystem.createPolygon(
             j * mapNodeWidth,
             i * mapNodeHeight,
             points,
           );
-          this.mapGraphics.beginFill(0x24352e);
-          this.mapGraphics.drawRect(
-            j * mapNodeWidth,
-            i * mapNodeHeight,
-            mapNodeWidth,
-            mapNodeHeight,
-          );
-          this.mapGraphics.endFill();
           this.grid.setWalkableAt(j * 2, i * 2, false);
           this.grid.setWalkableAt(j * 2 + 1, i * 2, false);
           this.grid.setWalkableAt(j * 2, i * 2 + 1, false);
           this.grid.setWalkableAt(j * 2 + 1, i * 2 + 1, false);
         } else {
-          this.blockMap[i * 30 + j] = 0;
         }
       }
     }
 
     this.lineColSystem.update();
+
+    this.mapActor.init({ mapWidth, mapHeight, mapTiles });
   }
 
   getClosestTarget(xPos, yPos, tarX, tarY) {
-    let gx = Math.floor(tarX / pathNodeWidth);
-    let gy = Math.floor(tarY / pathNodeHeight);
+    return { x: tarX, y: tarY };
+    let gx = Math.floor(tarX / MAP_NODE_WIDTH);
+    let gy = Math.floor(tarY / MAP_NODE_HEIGHT);
     if (this.grid.isWalkableAt(gx, gy)) {
       return { x: tarX, y: tarY };
     }

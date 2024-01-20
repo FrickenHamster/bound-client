@@ -22,7 +22,14 @@ export default class TrapManager {
   }
 
   spawnExplosion(data) {
-    const explosion = this.explosionPool.pop();
+    let explosion;
+    if (data.id === undefined) {
+      explosion = this.explosionPool.pop();
+    } else {
+      explosion = this.explosionMap[data.id];
+      this.explosionPool.splice(this.explosionPool.indexOf(explosion));
+    }
+    // const explosion = this.explosionPool.pop();
     if (!explosion) {
       console.log('out of explosions');
       return;
@@ -32,9 +39,14 @@ export default class TrapManager {
     this.activeExplosions.push(explosion);
   }
 
-  logicStep() {
+  loadData(trapsData) {
+    for (const trapData of trapsData) {
+    }
+  }
+
+  logicStep(data) {
     for (const explosion of this.activeExplosions) {
-      explosion.logicStep();
+      explosion.logicStep(data);
     }
   }
 }
