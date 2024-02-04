@@ -1,19 +1,42 @@
-import { Assets, Sprite } from 'pixi.js';
+import { Assets, Container, Sprite, Text } from 'pixi.js';
 import { pathNodeHeight, pathNodeWidth } from '#config/mapConstants';
 
+export const BOUNDER_STATES = {
+  IDLE: 0,
+  MOVING: 1,
+};
+
 export default class Bounder {
-  constructor(gameWorld, layer) {
-    this.gameWorld = gameWorld;
+  constructor(manager, layer, id) {
+    this.manager = manager;
+    this.id = id;
     this.layer = layer;
+
+    this.container = new Container();
+    layer.addChild(this.container);
     this.sprite = new Sprite();
-    layer.addChild(this.sprite);
+    this.container.addChild(this.sprite);
+    this.nameText = new Text('', {
+      fontSize: 15,
+      fill: 'white',
+      stroke: 'black',
+      strokeThickness: 3,
+    });
+    this.nameText.anchor.set(0.5);
+    this.nameText.y = 28;
+    this.container.addChild(this.nameText);
     this.alive = false;
   }
 
-  async spawn(x, y) {
-    this.xPos = x;
-    this.yPos = y;
+  async init({ xPos, yPos, ownerId, tarX, tarY, state }) {
+    this.xPos = xPos;
+    this.yPos = yPos;
+    this.ownerId = ownerId;
     const bounderSprites = await Assets.loadBundle('bounders');
+
+    const name =
+      this.manager.gameWorld.gameManager.playerManager.playerMap[ownerId].name;
+    this.nameText.text = name;
 
     this.state = 'idle';
 
@@ -30,10 +53,23 @@ export default class Bounder {
 
     this.updateSprite();
     this.alive = true;
+    this.active = true;
+
+    if (state === BOUNDER_STATES.MOVING) {
+      this.orderMoveTarget(tarX, tarY);
+    }
+  }
+
+  spawn(xPos, yPos) {
+    this.xPos = xPos;
+    this.yPos = yPos;
+    this.state = BOUNDER_STATES.IDLE;
+    this.alive = true;
+    this.updateSprite();
   }
 
   die() {
-    let newPosition;
+    /*let newPosition;
     if (this.checkpointIndex >= 0) {
       newPosition = this.gameWorld.zoneManager.randomCheckpointPosition(
         this.checkpointIndex,
@@ -44,7 +80,7 @@ export default class Bounder {
     this.xPos = newPosition.x;
     this.yPos = newPosition.y;
     this.state = 'idle';
-    this.updateSprite();
+    this.updateSprite();*/
   }
 
   logicStep() {
@@ -59,6 +95,7 @@ export default class Bounder {
         const distSq =
           Math.pow(this.nextY - this.yPos, 2) +
           Math.pow(this.nextX - this.xPos, 2);
+
         if (distSq < this.moveSpeed * this.moveSpeed) {
           this.pathPosition++;
           if (this.pathPosition === this.path.length) {
@@ -88,19 +125,19 @@ export default class Bounder {
     }
 
     if (this.xPos !== startX || this.yPos !== startY) {
-      const hitCheckpoint = this.gameWorld.zoneManager.pointInCheckpoint(
-        this.xPos,
-        this.yPos,
-      );
+      const hitCheckpoint =
+        this.manager.gameWorld.zoneManager.pointInCheckpoint(
+          this.xPos,
+          this.yPos,
+        );
       if (hitCheckpoint && hitCheckpoint.id > this.checkpointIndex) {
-        console.log('reeeee');
         this.checkpointIndex = hitCheckpoint.id;
       }
     }
   }
 
   orderMoveTarget(tarX, tarY) {
-    const final = this.gameWorld.gameMap.getClosestTarget(
+    const final = this.manager.gameWorld.gameMap.getClosestTarget(
       this.xPos,
       this.yPos,
       tarX,
@@ -110,7 +147,7 @@ export default class Bounder {
     tarY = final.y;
     this.tarX = tarX;
     this.tarY = tarY;
-    const res = this.gameWorld.gameMap.findPath(
+    const res = this.manager.gameWorld.gameMap.findPath(
       this.xPos,
       this.yPos,
       tarX,
@@ -119,6 +156,7 @@ export default class Bounder {
     this.path = res.path;
     this.tarX = res.tarX;
     this.tarY = res.tarY;
+
     if (this.path?.length <= 1) return;
 
     this.state = 'moving';
@@ -129,6 +167,11 @@ export default class Bounder {
   }
 
   updateSprite() {
-    this.sprite.position.set(this.xPos, this.yPos);
+    this.container.position.set(this.xPos, this.yPos);
+  }
+
+  deactivate() {
+    this.container.visible = false;
+    this.active = false;
   }
 }
