@@ -24,12 +24,18 @@ export default class Explosion {
   logicStep({ tickCount }) {
     if ((tickCount - this.triggerOffset) % this.triggerInterval === 0) {
       this.sprite.gotoAndPlay(0);
-      const distSq =
-        Math.pow(this.yPos - this.manager.gameWorld.bounder.yPos, 2) +
-        Math.pow(this.xPos - this.manager.gameWorld.bounder.xPos, 2);
-      if (distSq < 64 * 64) {
-        this.manager.gameWorld.bounder.die();
+
+      for (const bounder of this.manager.gameWorld.bounderManager
+        .activeBounders) {
+        const distSq =
+          Math.pow(this.yPos - bounder.yPos, 2) +
+          Math.pow(this.xPos - bounder.xPos, 2);
+        if (distSq < 64 * 64) {
+          bounder.die();
+        }
       }
+
+      /* */
     }
   }
 

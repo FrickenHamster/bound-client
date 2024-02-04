@@ -41,6 +41,9 @@
   },
   "type": "module",
   "imports": {
-    "#config/*": "./config/*.js"
+    "#config/*": "./config/*.js",
+    "#config": "./config/index.js",
+    "#net/*": "./src/net/*.js",
+    "#net": "./src/net/index.js"
   }
 }

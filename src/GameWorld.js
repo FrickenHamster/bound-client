@@ -1,8 +1,9 @@
-import Bounder from './runner/Bounder.js';
+import Bounder from './bounders/Bounder.js';
 import { AnimatedSprite, Assets, Container, Sprite } from 'pixi.js';
 import GameMap from './map/GameMap.js';
 import TrapManager from './traps/TrapManager.js';
 import ZoneManager from './zones/ZoneManager.js';
+import BounderManager from './bounders/BounderManager.js';
 
 const SCROLL_SPEED = 8;
 export default class GameWorld {
@@ -23,6 +24,8 @@ export default class GameWorld {
 
     this.zoneManager = new ZoneManager();
 
+    this.bounderManager = new BounderManager(this, this.bounderLayer);
+
     this.viewX = 0;
     this.viewY = 0;
   }
@@ -36,17 +39,18 @@ export default class GameWorld {
 
     this.zoneManager.init(levelData.zones);
 
-    this.bounder = new Bounder(this, this.bounderLayer);
-
     const startPos = this.zoneManager.randomStartPosition();
-
-    this.bounder.spawn(startPos.x, startPos.y);
 
     this.tickCount = 0;
   }
 
+  syncInitialGame({ tickCount, bounders }) {
+    this.tickCount = tickCount;
+
+    this.bounderManager.syncInitialBounders(bounders);
+  }
+
   logicStep() {
-    this.bounder.logicStep();
     this.trapManager.logicStep({ tickCount: this.tickCount });
 
     if (this.gameManager.gameKeys.controls.gameViewUp.isDown) {
@@ -62,8 +66,11 @@ export default class GameWorld {
       this.viewX += SCROLL_SPEED;
     }
 
+    this.bounderManager.logicStep();
+
     this.container.position.set(-this.viewX, -this.viewY);
 
     this.tickCount++;
+    // console.log('tick count', this.tickCount)
   }
 }
