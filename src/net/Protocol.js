@@ -30,8 +30,8 @@ export const ProtocolSchema = {
       valueName: 'key',
     },
     {
-      type: 'name',
-      valueName: 'string',
+      type: 'string',
+      valueName: 'name',
     },
   ],
   [Protocol.JOIN]: [

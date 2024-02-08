@@ -7,5 +7,6 @@
   "chooseMockKuma": false,
   "logNet": true,
   "autoWait": true,
-  "logTick": false
+  "logTick": false,
+  "autoConnect": true
 }

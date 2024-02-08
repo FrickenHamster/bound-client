@@ -23,8 +23,8 @@ export default class GameManager {
     this.app.renderer.backgroundColor = 0x887755;
 
     this.kumaData = {
-      kumaId: 123123,
-      key: 'poopoo',
+      kumaId: Math.floor(Math.random() * 10000),
+      key: 'big bobo',
     };
 
     this.playerManager = new PlayerManager(this);
@@ -72,15 +72,22 @@ export default class GameManager {
     this.gameKeys.addKey('gameViewLeft', ['KeyA']);
     this.gameKeys.addKey('gameViewRight', ['KeyD']);
 
-    this.initGame(levelData);
+    // this.initGame(levelData);
+
+    document.getElementById('connect-button').onclick = () => {
+      const nameInput = document.getElementById('name-input');
+      this.name = nameInput.value;
+      this.client.connect(config.serverHost);
+    };
+    if (config.autoConnect) {
+      this.client.connect(config.serverHost);
+    }
   }
 
   async initGame(levelData) {
     await preloadGame();
 
     this.playerManager.init();
-
-    this.client.connect(config.serverHost);
 
     this.gameWorld.initGame(levelData);
 

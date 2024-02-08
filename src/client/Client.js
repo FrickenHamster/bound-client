@@ -1,6 +1,8 @@
 import { createBufferFromProtocol, decodeProtocol, Protocol } from '#net';
 import { getConfig } from '#config';
 
+import levelData from '../../config/level.json';
+
 const config = getConfig();
 
 export default class Client {
@@ -19,13 +21,33 @@ export default class Client {
     this.socket.onopen = () => {
       this.log(`connected to host ${host}`);
 
-      this.sendJoin();
+      if (config.autoConnect) {
+        console.log('meowwoooo');
+        this.sendJoin();
+      } else {
+        this.sendAddPlayer(
+          this.gameManager.name,
+          this.gameManager.kumaData.kumaId,
+          this.gameManager.kumaData.key,
+        );
+        this.sendJoin();
+      }
 
-      setInterval(() => {
+      /*setInterval(() => {
         this.sendPing();
-      }, 3000);
+      }, 3000);*/
     };
     this.socket.onmessage = this.handleMessage;
+  }
+
+  sendAddPlayer(name, kumaId, key) {
+    console.log('miu', name, kumaId, key);
+    const buffer = createBufferFromProtocol(Protocol.ADD_PLAYER, {
+      name,
+      kumaId,
+      key,
+    });
+    this.sendBuffer(buffer);
   }
 
   sendJoin() {
@@ -75,6 +97,7 @@ export default class Client {
           name: this.name,
         });
         this.gameManager.playerManager.syncPlayers(json.players);
+        this.gameManager.initGame(levelData);
         break;
       }
 
